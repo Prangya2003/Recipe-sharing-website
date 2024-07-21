@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     #Custom Apps
     'userprofile',
     'recipe',
-    'search',
 ]
 
 MIDDLEWARE = [
