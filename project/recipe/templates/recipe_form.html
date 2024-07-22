@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Create/Update Recipe{% endblock %}
+
+{% block body %}
+<h1>Create/Update Recipe</h1>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <!-- Recipe Name -->
+  <div class="form-group">
+    <label for="recipe_name">Recipe Name</label>
+    <input type="text" class="form-control" id="recipe_name" name="recipe_name" value="{{ recipe.recipe_name if recipe else '' }}" required>
+  </div>
+  
+  <!-- Picture -->
+  <div class="form-group">
+    <label for="picture">Picture</label>
+    {% if recipe and recipe.picture %}
+      <img src="{{ recipe.picture.url }}" alt="Recipe Image" class="img-thumbnail mt-2" style="width: 100px;">
+    {% endif %}
+    <input type="file" class="form-control-file" id="picture" name="picture">
+  </div>
+  
+  <!-- Rating -->
+  <div class="form-group">
+    <label for="rating">Rating</label>
+    <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" value="{{ recipe.rating if recipe else '' }}" required>
+  </div>
+  
+  <!-- Cuisine -->
+  <div class="form-group">
+    <label for="cuisine">Cuisine</label>
+    <input type="text" class="form-control" id="cuisine" name="cuisine" value="{{ recipe.cuisine if recipe else '' }}" required>
+  </div>
+  
+  <!-- Time to Cook -->
+  <div class="form-group">
+    <label for="time_to_cook">Time to Cook (minutes)</label>
+    <input type="number" class="form-control" id="time_to_cook" name="time_to_cook" value="{{ recipe.time_to_cook if recipe else '' }}" required>
+  </div>
+  
+  <!-- Food Type -->
+  <div class="form-group">
+    <label for="food_type">Food Type</label>
+    <input type="text" class="form-control" id="food_type" name="food_type" value="{{ recipe.food_type if recipe else '' }}" required>
+  </div>
+  
+  <!-- Description -->
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" required>{{ recipe.description if recipe else '' }}</textarea>
+  </div>
+  
+  <!-- Submit Button -->
+  <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+</form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Recipe Detail{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<div class="container mt-5 pt-4">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Recipe name</th>
+            <th scope="col">Recipe Desc</th>
+            <th scope="col">Image</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for recipe in recipes %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{recipe.recipe_name}}</td>
+            <td>{{recipe.description}}</td>
+            <td>{{recipe.picture.url}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+
+{% endblock %}
+<!--
+<div class="container mt-5 pt-4">
+    <h2>Delete Recipe</h2>
+    <p>Are you sure you want to delete the recipe "{{ recipe.recipe_name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Recipe</button>
+        <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+-->

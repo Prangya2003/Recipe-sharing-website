@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Recipe List{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<div class="container mt-5 pt-4">
+    <h2>Recipe List</h2>
+    <div class="list-group">
+        {% for recipe in recipes %}
+        <a href="{% url 'recipe_detail' recipe.id %}" class="list-group-item list-group-item-action">
+            <img src="{{ recipe.picture.url }}" alt="Recipe Image" class="img-thumbnail" style="width: 100px;">
+            <h5 class="mb-1">{{ recipe.recipe_name }}</h5>
+            <p class="mb-1">{{ recipe.cuisine }}</p>
+            <small>Rating: {{ recipe.rating }} | Time to Cook: {{ recipe.time_to_cook }} minutes</small>
+        </a>
+        {% empty %}
+        <p>No recipes available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
