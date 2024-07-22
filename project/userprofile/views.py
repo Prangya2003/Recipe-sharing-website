@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
 # Create your views here.
@@ -29,7 +29,7 @@ def signup_view(request):
         email = request.POST.get('email')
 
         if get_user_model().objects.filter(username=username).exists():
-            messages.error(request,"Username is already taken")
+            # messages.error(request,"Username is already taken")
             error_flag = True
 
         else:
@@ -51,3 +51,19 @@ def home_view(request):
         return render(request,'home.html')
     else:
         return redirect('login_view')
+
+def profile_view(request,username):
+    user_instance = get_user_model().objects.get(username=username)
+    data = {
+        
+    }
+    return render(request, 'profile.html',context={"request":request,"user":user_instance,"data":data})
+    
+def faq_view(request):
+    return render(request, 'faq.html')
+
+def contact_view(request):
+    return render(request, 'contact.html')
+
+def services_view(request):
+    return render(request, 'services.html')
