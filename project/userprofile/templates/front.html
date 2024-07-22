@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/media/welcome.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            max-height: calc(100vh - 60px); /* Adjust this value based on the heading height */
+            overflow-y:scroll;
+        }
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 150px;
+            flex-shrink: 0;
+        }
+        .gallery-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .heading {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        .rating span {
+            font-size: 20px;
+            color: #ffcc00;
+        }
+        .rating-point {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+        .description {
+            margin-top: 5px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .main-heading {
+            width: 100%;
+            text-align: center;
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <script>
+        // Redirect to login/signup after 5 seconds
+        setTimeout(function() {
+            window.location.href = "{% url 'login_view' %}";
+        }, 5000); // 5000 milliseconds = 5 seconds
+    </script>
+</head>
+<body>
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="/media/r1.jpg" alt="Picture 1">
+            <div class="heading">Ratatouille</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.5 out of 5</div>
+            <!-- <div class="description">meatless, Made with a bounty of fresh, colorful vegetables.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r2.jpg" alt="Picture 2">
+            <div class="heading">Rich Pasta</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.2 out of 5</div>
+            <!-- <div class="description">tossed with butter, parsley, and Parmesan cheese.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r3.jpg" alt="Picture 3">
+            <div class="heading"> Pancack</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4 out of 5</div>
+            <!-- <div class="description">This is the description for picture 3.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r4.jpg" alt="Picture 4">
+            <div class="heading">Chicken Skewer</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+            </div>
+            <div class="rating-point">5 out of 5</div>
+            <!-- <div class="description">This is the description for picture 4.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r5.jpg" alt="Picture 5">
+            <div class="heading">Banana cake</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.9 out of 5</div>
+            <!-- <div class="description">This is the description for picture 5.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r6.jpg" alt="Picture 6">
+            <div class="heading">Palak Paneer</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.5 out of 5</div>
+            <!-- <div class="description">This is the description for picture 6.</div> -->
+        </div>
+    </div>
+    <h1 class="main-heading">Welcome to MyKitchen</h1>
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="/media/r7.jpg" alt="Picture 7">
+            <div class="heading">Rasmalai</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.9 out of 5</div>
+            <!-- <div class="description">This is the description for picture 7.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r8.jpg" alt="Picture 8">
+            <div class="heading">Punjabi Chole Masala</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.3 out of 5</div>
+            <!-- <div class="description">Popular in North Indian resturants</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r9.jpg" alt="Picture 9">
+            <div class="heading">Braciole</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+            </div>
+            <div class="rating-point">5 out of 5</div>
+            <!-- <div class="description">This is the description for picture 9.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r10.jpg" alt="Picture 10">
+            <div class="heading">Dessert</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                
+            </div>
+            <div class="rating-point">4.6 out of 5</div>
+            <!-- <div class="description">This is the description for picture 10.</div> -->
+        </div>
+        <div class="gallery-item">
+            <img src="/media/r11.jpg" alt="Picture 11">
+            <div class="heading">Idli</div>
+            <div class="rating">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+            </div>
+            <div class="rating-point">4 out of 5</div>
+            <!-- <div class="description">This is the description for picture 10.</div> -->
+        </div>   
+
