@@ -3,51 +3,97 @@
 
 {% block body %}
 <div class="container mt-5 pt-4">
-    <h2>Recipe Details</h2>
-    <hr/>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Recipe Name</th>
-                <th scope="col">Recipe Description</th>
-                <th scope="col">Image</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Since 'recipe' is a single object, no need for 'for' loop -->
-            <tr>
-                <th scope="row">1</th> <!-- Assuming only one recipe, so counter is 1 -->
-                <td>{{ recipe.recipe_name }}</td>
-                <td>{{ recipe.description }}</td>
-                <td>
-                    <img src="{{ recipe.picture.url }}" style="height: 200px;">
-                </td>
-                <td>
-                    
-                    <form method="post" action="{% url 'delete_recipe_view' recipe.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                    <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <h2 class="mb-4">Recipe Details</h2>
 
-    <!-- Link to user profile -->
+    <!-- Recipe Detail Card -->
+    <div class="card mb-4 shadow-lg">
+        <div class="row g-0">
+            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                <img src="{{ recipe.picture.url }}" class="img-fluid rounded-start" style="max-height: 300px; object-fit: cover;" alt="{{ recipe.recipe_name }}">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">{{ recipe.recipe_name }}</h3>
+                    <p class="card-text"><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
+                    <p class="card-text"><strong>Time to Cook:</strong> {{ recipe.time_to_cook }} minutes</p>
+                    <p class="card-text"><strong>Food Type:</strong> {{ recipe.food_type }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Steps to Cook Box -->
+    <div class="steps-box mb-4">
+        <h4>Steps to Cook</h4>
+        <p class="steps-text">{{ recipe.description }}</p>
+    </div>
+
+    <!-- Actions and Profile Link -->
+    <div class="d-flex justify-content-between">
+        <form method="post" action="{% url 'delete_recipe_view' recipe.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
+    </div>
+
     {% if creator_username %}
     <div class="mt-4">
         <h3>Recipe Creator:</h3>
         <p>
-            <a href="{% url 'profile_view' username=creator_username %}">
+            <a href="{% url 'profile_view' username=creator_username %}" class="btn btn-info">
                 View Profile
             </a>
         </p>
     </div>
     {% endif %}
 </div>
-{% endblock %}
 
-<!--<a href="{% url 'delete_recipe_view' recipe.id %}" class="btn btn-danger m-2">Delete</a>-->
+<style>
+    .card {
+        border-radius: 15px;
+    }
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .card-text {
+        font-size: 1.1rem;
+    }
+    .btn {
+        font-size: 0.9rem;
+    }
+    .btn-danger, .btn-success, .btn-info {
+        margin: 0.5rem;
+    }
+    .steps-box {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    .steps-box h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .steps-text {
+        white-space: pre-wrap; /* Preserve spaces and line breaks */
+    }
+    /* Additional styling for the image and details layout */
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .card img {
+        max-height: 300px;
+        width: auto;
+    }
+    .row.g-0 {
+        margin: 0;
+    }
+    .col-md-4, .col-md-8 {
+        padding: 0;
+    }
+</style>
+{% endblock %}

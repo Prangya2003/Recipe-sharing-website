@@ -19,7 +19,7 @@ def profile_view(request, username):
     data = {
         "is_user_profile": request.user == user_instance,  
         "recipes_count": user_recipes.count(), 
-        "user_recipes": user_recipes
+        "user_recipes": user_recipes,
     }
 
     return render(request, 'profile.html', context={"request": request, "user": user_instance, "data": data})
@@ -124,7 +124,11 @@ def logout_view(request):
     
 def home_view(request):
     if request.user.is_authenticated:
-        return render(request,'home.html')
+        recipes = RecipeModel.objects.all()  # Fetch all recipes
+        context = {
+            'recipes': recipes
+        }
+        return render(request, 'home.html', context)
     else:
         return redirect('login_view')
  
