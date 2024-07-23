@@ -2,5 +2,14 @@
 {% block title %}Homepage{% endblock %}
 
 {% block body %}
-<h2>Homepage</h2>
+
+{% include "navbar.html" %}
+<div class="content">
+    <img src="/media/reci.jpg" alt="Sample Image" style="height: 100vh; padding-left: 120px;">
+</div>
+<div class="footer">
+    <a href="{% url 'faq' %}">FAQ</a>
+    <a href="{% url 'contact' %}">Contact Us</a>
+    <a href="{% url 'services' %}">Services</a>
+</div>
 {% endblock %}

@@ -1,5 +1,7 @@
+
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
+
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
 from recipe.models import RecipeModel
@@ -47,7 +49,7 @@ def signup_view(request):
         email = request.POST.get('email')
 
         if get_user_model().objects.filter(username=username).exists():
-            messages.error(request,"Username is already taken")
+            # messages.error(request,"Username is already taken")
             error_flag = True
             return redirect('signup_view')
             
@@ -125,3 +127,12 @@ def home_view(request):
         return render(request,'home.html')
     else:
         return redirect('login_view')
+ 
+def faq_view(request):
+    return render(request, 'faq.html')
+
+def contact_view(request):
+    return render(request, 'contact.html')
+
+def services_view(request):
+    return render(request, 'services.html')
