@@ -36,7 +36,7 @@
                         <a class="nav-link" href="{% url 'home_view' %}">Home</a>
                     </li>
                     <li class="navbar-item">
-                        <a class="nav-link" href="{% url 'profile_view' %}">Profile</a>
+                        <a class="nav-link" href="{% url 'profile_view' username=request.user.username %}">Profile</a>
                     </li>
 
 

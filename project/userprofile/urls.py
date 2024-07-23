@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('profile-view/<str:username>/',profile_view,name="profile_view"),
     path('update-user-profile/',update_user_profile,name="update_user_profile"),
-    path('update-password-view/',update_password_view,name="update_password_view")
+    path('update-password-view/',update_password_view,name="update_password_view"),
 
     path('faq/', faq_view, name="faq"),
     path('contact/', contact_view, name="contact"),
