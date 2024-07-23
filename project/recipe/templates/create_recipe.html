@@ -24,31 +24,33 @@
         <button type="submit" class="btn btn-success">Add Recipe</button>
     </form>
 
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Recipe name</th>
-            <th scope="col">Recipe Desc</th>
-            <th scope="col">Image</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for recipe in recipes %}
-          <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            <td>{{recipe.recipe_name}}</td>
-            <td>{{recipe.description}}</td>
-            <td>
-                <img src="/media/{{recipe.picture.url}}" style="height:200px"></td>
-                <td>
-                    <a href="{% url 'delete_recipe_view' recipe.id %}" class="btn btn-danger m-2">Delete</a>
-                    <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
-                </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-    </table>
 </div>
 {% endblock %}
+<!--
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Recipe name</th>
+        <th scope="col">Recipe Desc</th>
+        <th scope="col">Image</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for recipe in recipes %}
+      <tr>
+        <th scope="row">{{forloop.counter}}</th>
+        <td>{{recipe.recipe_name}}</td>
+        <td>{{recipe.description}}</td>
+        <td>
+            <img src="/media/{{recipe.picture.url}}" style="height:200px"></td>
+            <td>
+                <a href="{% url 'delete_recipe_view' recipe.id %}" class="btn btn-danger m-2">Delete</a>
+                <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
+            </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+-->

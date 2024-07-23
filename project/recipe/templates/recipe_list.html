@@ -2,20 +2,39 @@
 {% block title %}Recipe List{% endblock %}
 
 {% block body %}
-{% include "navbar.html" %}
 <div class="container mt-5 pt-4">
-    <h2>Recipe List</h2>
-    <div class="list-group">
-        {% for recipe in recipes %}
-        <a href="{% url 'recipe_detail' recipe.id %}" class="list-group-item list-group-item-action">
-            <img src="{{ recipe.picture.url }}" alt="Recipe Image" class="img-thumbnail" style="width: 100px;">
-            <h5 class="mb-1">{{ recipe.recipe_name }}</h5>
-            <p class="mb-1">{{ recipe.cuisine }}</p>
-            <small>Rating: {{ recipe.rating }} | Time to Cook: {{ recipe.time_to_cook }} minutes</small>
-        </a>
-        {% empty %}
-        <p>No recipes available.</p>
-        {% endfor %}
-    </div>
+    <h1>Recipe List</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Recipe Name</th>
+                <th scope="col">Recipe Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ recipe.recipe_name }}</td>
+                <td>{{ recipe.description }}</td>
+                <td>
+                    <img src="{{ recipe.picture.url }}" style="height: 200px;">
+                </td>
+                <td>
+                    <a href="{% url 'delete_recipe_view' recipe.id %}" class="btn btn-danger m-2">Delete</a>
+                    <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
+                    <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-info">View Details</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No recipes available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

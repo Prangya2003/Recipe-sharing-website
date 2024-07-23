@@ -8,6 +8,13 @@
             <img src="/media/logo1.png" alt="Logo">
         </div>
         <h2>Sign Up</h2>
+        {% if messages %}
+        <div class="alert alert-primary" role="alert">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </div>
+        {% endif %}  
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -34,3 +41,5 @@
 </div>
 
 {% endblock %}
+
+  

@@ -2,40 +2,52 @@
 {% block title %}Recipe Detail{% endblock %}
 
 {% block body %}
-{% include "navbar.html" %}
 <div class="container mt-5 pt-4">
+    <h2>Recipe Details</h2>
+    <hr/>
     <table class="table">
         <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Recipe name</th>
-            <th scope="col">Recipe Desc</th>
-            <th scope="col">Image</th>
-          </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Recipe Name</th>
+                <th scope="col">Recipe Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+            </tr>
         </thead>
         <tbody>
-          {% for recipe in recipes %}
-          <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            <td>{{recipe.recipe_name}}</td>
-            <td>{{recipe.description}}</td>
-            <td>{{recipe.picture.url}}</td>
-          </tr>
-          {% endfor %}
+            <!-- Since 'recipe' is a single object, no need for 'for' loop -->
+            <tr>
+                <th scope="row">1</th> <!-- Assuming only one recipe, so counter is 1 -->
+                <td>{{ recipe.recipe_name }}</td>
+                <td>{{ recipe.description }}</td>
+                <td>
+                    <img src="{{ recipe.picture.url }}" style="height: 200px;">
+                </td>
+                <td>
+                    
+                    <form method="post" action="{% url 'delete_recipe_view' recipe.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
+                </td>
+            </tr>
         </tbody>
     </table>
-    
-</div>
 
-{% endblock %}
-<!--
-<div class="container mt-5 pt-4">
-    <h2>Delete Recipe</h2>
-    <p>Are you sure you want to delete the recipe "{{ recipe.recipe_name }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Delete Recipe</button>
-        <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+    <!-- Link to user profile -->
+    {% if creator_username %}
+    <div class="mt-4">
+        <h3>Recipe Creator:</h3>
+        <p>
+            <a href="{% url 'profile_view' username=creator_username %}">
+                View Profile
+            </a>
+        </p>
+    </div>
+    {% endif %}
 </div>
--->
+{% endblock %}
+
+<!--<a href="{% url 'delete_recipe_view' recipe.id %}" class="btn btn-danger m-2">Delete</a>-->

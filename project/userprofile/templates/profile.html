@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-4">
+    <h1>{{ user.username }}'s Profile</h1>
+    <p>Is this your profile? <strong>{{ data.is_user_profile }}</strong></p>
+
+    {% if data.is_user_profile %}
+        <h2>My Recipes</h2>
+        {% for recipe in data.user_recipes %}
+            <div>
+                <h3>{{ recipe.recipe_name }}</h3>
+                <!-- Debug output -->
+                <p>Recipe ID: {{ recipe.id }}</p>
+                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-primary">View Recipe</a>
+            </div>
+        {% endfor %}
+        
+        <h2>Update Profile</h2>
+        <a href="{% url 'update_user_profile' %}" class="btn btn-primary">Update Profile</a>
+        
+        <h2>Update Password</h2>
+        <a href="{% url 'update_password_view' %}" class="btn btn-primary">Update Password</a>
+
+        <h2>Add Recipe</h2>
+        <a href="{% url 'create_recipe_view' %}" class="btn btn-primary">Add Recipe</a>
+    {% endif %}
+</div>
+{% endblock %}
