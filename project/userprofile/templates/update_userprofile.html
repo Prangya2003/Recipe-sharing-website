@@ -20,10 +20,6 @@
             <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
         </div>
         <div class="mb-3">
-            <label for="bio" class="form-label">Bio</label>
-            <textarea class="form-control" id="bio" name="bio" rows="3">{{ profile.bio }}</textarea>
-        </div>
-        <div class="mb-3">
             <label for="profile_picture" class="form-label">Profile Picture</label>
             <input type="file" class="form-control" id="profile_picture" name="profile_picture">
             {% if profile.profile_picture %}

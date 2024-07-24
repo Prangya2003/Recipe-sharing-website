@@ -1,7 +1,6 @@
 
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
 from recipe.models import RecipeModel
@@ -14,16 +13,17 @@ def profile_view(request, username):
     User = get_user_model()
     user_instance = get_object_or_404(User, username=username)
     
-    user_recipes = RecipeModel.objects.filter(chef=user_instance) 
+    # Fetch user profile
+    user_profile = get_object_or_404(UserProfileModel, user=user_instance)
 
+    user_recipes = RecipeModel.objects.filter(chef=user_instance)
     data = {
-        "is_user_profile": request.user == user_instance,  
-        "recipes_count": user_recipes.count(), 
+        "is_user_profile": request.user == user_instance,
+        "recipes_count": user_recipes.count(),
         "user_recipes": user_recipes,
+        "user_profile": user_profile,  # Add user profile to the context
     }
-
     return render(request, 'profile.html', context={"request": request, "user": user_instance, "data": data})
-
 
 def login_view(request):
     if request.method == 'POST':
@@ -49,7 +49,7 @@ def signup_view(request):
         email = request.POST.get('email')
 
         if get_user_model().objects.filter(username=username).exists():
-            # messages.error(request,"Username is already taken")
+            messages.error(request,"Username is already taken")
             error_flag = True
             return redirect('signup_view')
             
@@ -78,7 +78,7 @@ def update_user_profile(request):
             else:
                 user_instance.username = new_username
 
-        user_profile_instance.bio = request.POST.get('bio')
+       
         if 'profile_picture' in request.FILES:
             user_profile_instance.profile_picture = request.FILES['profile_picture']
 
@@ -91,9 +91,12 @@ def update_user_profile(request):
     return render(request, 'update_userprofile.html', context)
 
 
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
 def update_password_view(request):
     user_instance = request.user
-    
+
     if request.method == 'POST':
         current_password = request.POST.get('password')
         new_password = request.POST.get('new_password')
@@ -109,10 +112,15 @@ def update_password_view(request):
                 user = authenticate(username=user_instance.username, password=new_password)
                 if user is not None:
                     login(request, user)
-                
-                return redirect('profile_view', username=user_instance.username)
+                    update_session_auth_hash(request, user)  # Update session to prevent logout
+                    messages.success(request, 'Your password was successfully updated!')
+                    return redirect('profile_view', username=user_instance.username)
+                else:
+                    messages.error(request, 'Authentication failed after password change.')
             else:
-                print("New passwords do not match")
+                messages.error(request, 'New passwords do not match.')
+        else:
+            messages.error(request, 'Current password is incorrect.')
 
     context = {"request": request, "user": user_instance}
     return render(request, 'update_password.html', context)
@@ -124,7 +132,7 @@ def logout_view(request):
     
 def home_view(request):
     if request.user.is_authenticated:
-        recipes = RecipeModel.objects.all()  # Fetch all recipes
+        recipes = RecipeModel.objects.all()
         context = {
             'recipes': recipes
         }
