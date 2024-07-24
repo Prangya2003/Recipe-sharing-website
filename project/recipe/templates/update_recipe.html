@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Update Recipe{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-4">
+    <form method="post" enctype="multipart/form-data" class="col-8 mx-auto card p-4 shadow-lg">
+        {% csrf_token %}
+        <h2>Update Recipe</h2>
+        <hr/>
+        <div class="mb-3">
+            <label for="recipe_name">Recipe Name</label>
+            <input type="text" class="form-control" id="recipe_name" name="recipe_name" value="{{ recipe.recipe_name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="picture">Picture</label>
+            {% if recipe.picture %}
+                <div class="mb-2">
+                    <img src="{{ recipe.picture.url }}" alt="Current Picture" class="img-preview">
+                </div>
+            {% endif %}
+            <input type="file" class="form-control-file" id="picture" name="picture">
+        </div>
+        <div class="mb-3">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ recipe.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="cuisine">Cuisine</label>
+            <input type="text" class="form-control" id="cuisine" name="cuisine" value="{{ recipe.cuisine }}">
+        </div>
+        <div class="mb-3">
+            <label for="time_to_cook">Time to Cook (in minutes)</label>
+            <input type="number" class="form-control" id="time_to_cook" name="time_to_cook" value="{{ recipe.time_to_cook }}" min="1">
+        </div>
+        <div class="mb-3">
+            <label for="food_type">Food Type</label>
+            <select class="form-control" id="food_type" name="food_type">
+                <option value="">Select food type</option>
+                <option value="Appetizer" {% if recipe.food_type == 'Appetizer' %}selected{% endif %}>Appetizer</option>
+                <option value="Main Course" {% if recipe.food_type == 'Main Course' %}selected{% endif %}>Main Course</option>
+                <option value="Dessert" {% if recipe.food_type == 'Dessert' %}selected{% endif %}>Dessert</option>
+                <option value="Beverage" {% if recipe.food_type == 'Beverage' %}selected{% endif %}>Beverage</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Update Recipe</button>
+    </form>
+</div>
+
+<style>
+    .img-preview {
+        max-width: 150px; /* Adjust the width as needed */
+        height: auto; /* Maintain aspect ratio */
+    }
+</style>
+{% endblock %}
