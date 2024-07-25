@@ -17,6 +17,12 @@
                     <p class="card-text"><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
                     <p class="card-text"><strong>Time to Cook:</strong> {{ recipe.time_to_cook }} minutes</p>
                     <p class="card-text"><strong>Food Type:</strong> {{ recipe.food_type }}</p>
+                    
+                    <!-- Ingredients Section -->
+                    <div class="mb-3">
+                        <h4>Ingredients:</h4>
+                        <pre>{{ recipe.ingredients }}</pre> <!-- Use <pre> to preserve line breaks and spacing -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -24,7 +30,7 @@
 
     <!-- Steps to Cook Box -->
     <div class="steps-box mb-4">
-        <h4>Steps to Cook</h4>
+        <h4>Steps to Cook:</h4>
         <p class="steps-text">{{ recipe.description }}</p>
     </div>
 
@@ -80,7 +86,6 @@
     .steps-text {
         white-space: pre-wrap; /* Preserve spaces and line breaks */
     }
-    /* Additional styling for the image and details layout */
     .card-body {
         display: flex;
         flex-direction: column;
@@ -94,6 +99,19 @@
     }
     .col-md-4, .col-md-8 {
         padding: 0;
+    }
+    /* Style for Ingredients section */
+    .mb-3 h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    pre {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 8px;
+        white-space: pre-wrap; /* Preserve formatting */
+        word-wrap: break-word; /* Allow long words to be broken */
     }
 </style>
 {% endblock %}

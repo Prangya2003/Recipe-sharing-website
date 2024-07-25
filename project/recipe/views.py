@@ -25,6 +25,7 @@ def create_recipe_view(request):
         cuisine = request.POST.get('cuisine')
         time_to_cook = request.POST.get('time_to_cook')
         food_type = request.POST.get('food_type')
+        ingredients = request.POST.get('ingredients')
         chef = request.user if request.user.is_authenticated else User.objects.get(username='defaultuser')
 
         recipe = RecipeModel(
@@ -34,13 +35,14 @@ def create_recipe_view(request):
             chef=chef,
             cuisine=cuisine,
             time_to_cook=time_to_cook,
-            food_type=food_type
+            food_type=food_type,
+            ingredients=ingredients,
         )
         recipe.save()
-
         return redirect('recipe_detail',id=recipe.id)  
-
     return render(request, 'create_recipe.html')
+
+
 
 @login_required
 def update_recipe_view(request, id):
@@ -58,6 +60,7 @@ def update_recipe_view(request, id):
         recipe.cuisine = request.POST.get('cuisine')
         recipe.time_to_cook = request.POST.get('time_to_cook')
         recipe.food_type = request.POST.get('food_type')
+        recipe.ingredients = request.POST.get('ingredients')
         recipe.save()
         return redirect('recipe_detail', id=recipe.id)
 
@@ -75,5 +78,4 @@ def delete_recipe_view(request, id):
         recipe.delete()
         return redirect('profile_view', username=request.user.username)
 
-    # Optionally, render a confirmation page if you want to confirm deletion
     return render(request, 'confirm_delete.html', {'recipe': recipe})

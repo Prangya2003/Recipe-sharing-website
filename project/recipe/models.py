@@ -12,10 +12,10 @@ class RecipeModel(models.Model):
     time_to_cook = models.CharField(max_length=100,default=0)
     food_type = models.CharField(max_length=100,default='Unknown')
     description = models.TextField()
+    ingredients = models.TextField(blank=True, null=True)
      
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
-    
-    
-    
+
+
      
