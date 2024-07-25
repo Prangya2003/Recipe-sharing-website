@@ -169,6 +169,7 @@ def home_view(request):
 def faq_view(request):
     return render(request, 'faq.html')
 
+@login_required
 def contact_view(request):
     return render(request, 'contact.html')
 
