@@ -22,5 +22,5 @@ urlpatterns = [
     path('services/', services_view, name="services"),
     
     path('search-profile-view/',search_profile_view, name="search_profile_view"),
-    path('saved-recipes-view/', saved_recipes_view, name='saved_recipes'),
+    path('saved-recipes-view/', saved_recipes_view, name="saved_recipes_view"),
 ]

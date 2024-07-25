@@ -6,8 +6,6 @@ from .models import UserProfileModel
 from recipe.models import RecipeModel
 from .models import UserProfileModel
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-
 
 # Create your views here.
 def front_view(request):
@@ -41,6 +39,7 @@ def login_view(request):
             return redirect('home_view')
         else:
             print("Invalid username or password")
+            messages.success(request, "Invalid username or password")
             return redirect('login_view')
 
     return render(request, 'login.html') 
@@ -65,6 +64,7 @@ def signup_view(request):
             user_instance.save()
             UserProfileModel.objects.create(user=user_instance)
             messages.info(request,'Userprofile created successfully')
+            messages.success(request,'Userprofile created successfully')
         if not error_flag:
             return redirect('login_view')
     return render(request, 'signup.html')
@@ -131,26 +131,25 @@ def update_password_view(request):
     context = {"request": request, "user": user_instance}
     return render(request, 'update_password.html', context)
 
+
 def search_profile_view(request):
-    query = request.GET.get('query')
+    query = request.GET['query']
+    #recipes = RecipeModel.objects.all()
+    recipesName = RecipeModel.objects.filter(recipe_name__icontains=query)
+    recipesdescription = RecipeModel.objects.filter(description__icontains=query)
+    recipescuisine = RecipeModel.objects.filter(cuisine__icontains=query)
+    recipesfood_type = RecipeModel.objects.filter(food_type__icontains=query)
+    recipestime_to_cook = RecipeModel.objects.filter(time_to_cook__icontains=query)
 
-    if query:
-        search_results = RecipeModel.objects.filter(
-            Q(recipe_name__icontains=query) |
-            Q(description__icontains=query) |
-            Q(chef__username__icontains=query)  # Assuming chef has a username field
-        )
-        if search_results:  # Check if any recipes matched the search
-            return render(request, 'search.html', context={'search_results': search_results})
-        #else:
-            # Handle no results scenario (e.g., redirect to another page, display a message)
-            #return HttpResponse('No recipes found for your search.')  # Example of handling no results
-    else:
-        # Display all recipes if no search term (optional)
-        return render(request, 'search.html', context={'search_results': RecipeModel.objects.all()})
 
-    # This line is unreachable if the above conditions return a response
-    return render(request, 'search.html', context={'search_results': search_results})
+    recipes = recipesName.union(recipesdescription,recipescuisine,recipesfood_type,recipestime_to_cook)
+    context = {
+            'recipes': recipes,
+            'query':query
+        }
+
+    return render(request, 'searching.html', context)
+
 
 def logout_view(request):
     logout(request)
@@ -175,8 +174,27 @@ def contact_view(request):
 def services_view(request):
     return render(request, 'services.html')
 
+from django.http import HttpResponseRedirect
+
 @login_required
 def saved_recipes_view(request):
     user_profile = get_object_or_404(UserProfileModel, user=request.user)
     saved_recipes = user_profile.saved_recipes.all()
-    return render(request, 'profile.html', {'saved_recipes': saved_recipes})
+
+    if request.method == 'POST':
+        recipe_id = request.POST.get('recipe_id')
+        recipe = get_object_or_404(RecipeModel, id=recipe_id)
+
+        if user_profile.saved_recipes.filter(id=recipe_id).exists():
+            user_profile.saved_recipes.remove(recipe)
+            messages.warning(request, "Recipe unsaved successfully")
+        else:
+            user_profile.saved_recipes.add(recipe)
+            messages.success(request, "Recipe saved successfully")
+
+        user_profile.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))  # Redirect back to previous page
+
+    return render(request, 'userprofile/saved_recipes.html', {'saved_recipes': saved_recipes})
+
+

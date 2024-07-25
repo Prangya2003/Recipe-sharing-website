@@ -4,10 +4,19 @@
 {% block body %}
 {% include "navbar.html" %}
 <div class="container mt-5 pt-4">
+    <h3>{{ recipe.recipe_name }}</h3>
+    <p>{{ recipe.description }}</p>
+    <p><strong>Created by:</strong> {{ creator_username }}</p>
 
-    <form method="post" action="{% url 'save_view' recipe.id %}">
+    <form method="post" action="{% url 'saved_recipes_view' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Save Recipe</button>
+        <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+        {% if is_saved %}
+            <button type="submit" class="btn btn-danger">Unsave Recipe</button>
+        {% else %}
+            <button type="submit" class="btn btn-primary">Save Recipe</button>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
+

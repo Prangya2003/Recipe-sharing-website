@@ -6,11 +6,11 @@
 <div class="container mt-5 pt-4">
   <h3>Saved Recipes</h3>
   <ul class="list-group">
-    {% if saved_recipes != 0 %}
+    {% if saved_recipes != 0%}
       {% for recipe in data.saved_recipes %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.recipe_name }}</a>
-          <form method="POST">
+          <form method="POST" action="{% url 'saved_recipes_view' %}">
             {% csrf_token %}
             <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
             <button type="submit" class="btn btn-sm btn-outline-danger">Unsave</button>
@@ -22,7 +22,4 @@
     {% endif %}
   </ul>
 </div>
-
 {% endblock %}
-
-
