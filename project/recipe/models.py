@@ -17,6 +17,9 @@ class RecipeModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
+    def __str__(self):
+        return self.recipe_name
+    
 class CommentModel(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,related_name="CommentModel_user",null=True)
     recipe = models.ForeignKey('RecipeModel',on_delete=models.CASCADE, related_name="CommentModel_recipe",null=True)

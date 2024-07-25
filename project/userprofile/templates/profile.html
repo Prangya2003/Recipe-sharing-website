@@ -141,6 +141,8 @@
                 <a href="{% url 'create_recipe_view' %}" class="btn btn-primary">Add Recipe</a>
             </div>
             
+            {% include "save.html" %}
+
             <div>
                 <h2>Profile Actions</h2>
                 <a href="{% url 'update_user_profile' %}" class="btn btn-primary">Update Profile</a>

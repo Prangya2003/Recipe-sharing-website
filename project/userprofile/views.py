@@ -4,11 +4,14 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
 from recipe.models import RecipeModel,CommentModel, RatingModel
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 def front_view(request):
     return render(request,'front.html')
 
+@login_required
 def profile_view(request, username):
     User = get_user_model()
     user_instance = get_object_or_404(User, username=username)
@@ -22,6 +25,7 @@ def profile_view(request, username):
         "recipes_count": user_recipes.count(),
         "user_recipes": user_recipes,
         "user_profile": user_profile,  # Add user profile to the context
+        "saved_recipes": user_profile.saved_recipes.all(),
     }
     return render(request, 'profile.html', context={"request": request, "user": user_instance, "data": data})
 
@@ -193,3 +197,30 @@ def view_more_posts(request,username):
     }
 
     return render(request, 'view_more_posts.html', context)
+
+def search_profile_view(request):
+    query = request.GET.get('query')
+
+    if query:
+        search_results = RecipeModel.objects.filter(
+            Q(recipe_name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(chef__username__icontains=query)  # Assuming chef has a username field
+        )
+        if search_results:  # Check if any recipes matched the search
+            return render(request, 'search.html', context={'search_results': search_results})
+        #else:
+            # Handle no results scenario (e.g., redirect to another page, display a message)
+            #return HttpResponse('No recipes found for your search.')  # Example of handling no results
+    else:
+        # Display all recipes if no search term (optional)
+        return render(request, 'search.html', context={'search_results': RecipeModel.objects.all()})
+
+    # This line is unreachable if the above conditions return a response
+    return render(request, 'search.html', context={'search_results': search_results})
+
+@login_required
+def saved_recipes_view(request):
+    user_profile = get_object_or_404(UserProfileModel, user=request.user)
+    saved_recipes = user_profile.saved_recipes.all()
+    return render(request, 'profile.html', {'saved_recipes': saved_recipes})
