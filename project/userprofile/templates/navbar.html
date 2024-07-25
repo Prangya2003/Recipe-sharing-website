@@ -12,7 +12,19 @@
             color: blue(186, 43, 43);
             text-decoration:none; 
         }
-
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            max-height: 120px; /* Adjust the height as needed */
+            width: auto; /* Maintain aspect ratio */
+            margin-right: 10px;
+        }
+        .welcome-text {
+            font-size: 1rem; /* Decrease text size */
+            color: #343a40; /* Adjust color as needed */
+        }
         .nav-link:hover {
             color: black(14, 14, 13);    
             text-decoration: underline; 
@@ -23,7 +35,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid pt-2 , pb-2">
             <a class="navbar-brand" href="index.html">
-                <img src="/media/logo1.png" alt="Logo"> Welcome to Tastopia
+                <img src="/media/logo1.png" alt="Logo" class="logo">
+                <span class="welcome-text">Welcome to Tastopia</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
