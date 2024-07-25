@@ -36,6 +36,8 @@
         </form>
         <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success">Update</a>
     </div>
+    
+    {% include "saving.html"%}
 
     {% if creator_username %}
     <div class="mt-4">

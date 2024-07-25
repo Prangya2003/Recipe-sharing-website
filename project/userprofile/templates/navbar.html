@@ -29,6 +29,12 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!--Search Bar-->
+            <form method="get" action="{% url 'search_profile_view' %}">  <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="button-addon2" name="query" id="query">  
+                <button class="btn btn-outline-primary" type="submit" id="button-addon2">Search</button>
+            </div>
+        </form>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
@@ -38,7 +44,7 @@
                     <li class="navbar-item">
                         <a class="nav-link" href="{% url 'profile_view' username=request.user.username %}">Profile</a>
                     </li>
-
+            
 
                     <li class="navbar-item">
                         <a class="nav-link" href="{% url 'logout_view' %}">Logout</a>
