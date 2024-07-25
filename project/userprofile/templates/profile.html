@@ -135,11 +135,8 @@
                     </div>
                 {% endfor %}
             </div>
-
-            <div>
-                <h2>Add Recipe</h2>
-                <a href="{% url 'create_recipe_view' %}" class="btn btn-primary">Add Recipe</a>
-            </div>
+            
+            {% include "save.html" %}
 
             <div>
                 <h2>Profile Actions</h2>
