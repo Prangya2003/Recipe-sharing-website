@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import front_view,login_view,signup_view,logout_view,home_view,profile_view,update_user_profile,update_password_view
 
-from .views import faq_view,contact_view,services_view
+from .views import faq_view,contact_view,services_view,view_more_posts
 
 
 urlpatterns = [
@@ -19,5 +19,6 @@ urlpatterns = [
     path('faq/', faq_view, name="faq"),
     path('contact/', contact_view, name="contact"),
     path('services/', services_view, name="services"),
+     path('userprofile/view-more-posts/<str:username>/', view_more_posts, name='view_more_posts'),
     
 ]

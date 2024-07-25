@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from userprofile.models import UserProfileModel
+
 # Create your models here.
 
 class RecipeModel(models.Model):
@@ -17,5 +17,19 @@ class RecipeModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     
     
-    
+class CommentModel(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,related_name="CommentModel_user",null=True)
+    recipe = models.ForeignKey('RecipeModel',on_delete=models.CASCADE, related_name="CommentModel_recipe",null=True)
+    content = models.TextField()
+
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+
+class RatingModel(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,related_name="RatingModel_user",null=True)
+    recipe = models.ForeignKey('RecipeModel',on_delete=models.CASCADE, related_name="RatingModel_recipe",null=True)
+    score = models.PositiveIntegerField()
+
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True,editable=False)
      
