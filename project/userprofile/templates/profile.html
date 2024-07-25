@@ -8,19 +8,19 @@
 
 <style>
     body {
-        background-color: #e9ecef; /* Soft light background color */
+        background-color: #e9ecef;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
     }
 
     .profile-page {
-        margin-top: 80px; /* Space from navbar */
+        margin-top: 80px;
         padding: 40px;
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
-        background-color: #ffffff; /* White background for the profile page */
+        background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
@@ -33,9 +33,18 @@
     .profile-pic {
         width: 150px;
         height: 150px;
-        border-radius: 50%;
+        border-radius: 20%;
         border: 5px solid #007bff;
         margin-bottom: 20px;
+        object-fit: cover;
+    }
+    .profile-pic-user {
+        width: 150px;
+        height: 150px;
+        border-radius: 20%;
+        border: 5px solid #007bff;
+        margin-bottom: 20px;
+        object-fit: cover;
     }
 
     h1 {
@@ -56,17 +65,18 @@
 
     .profile-content {
         display: flex;
-        flex-direction: column;
-        gap: 20px; /* Space between sections */
+        flex-wrap: wrap;
+        gap: 20px;
     }
 
     .profile-content > div {
+        flex: 1 1 45%;
         margin-bottom: 20px;
     }
 
     .btn {
         font-size: 0.875rem;
-        padding: 10px 20px;
+        padding: 12px 24px;
         border-radius: 25px;
         text-transform: uppercase;
         transition: background-color 0.3s, transform 0.2s;
@@ -75,6 +85,7 @@
         color: #fff;
         text-decoration: none;
         border: none;
+        cursor: pointer;
     }
 
     .btn-primary {
@@ -95,6 +106,15 @@
         transform: scale(1.05);
     }
 
+    .btn-tertiary {
+        background-color: #6c757d;
+    }
+
+    .btn-tertiary:hover {
+        background-color: #5a6268;
+        transform: scale(1.05);
+    }
+
     .recipe-item {
         padding: 15px;
         background-color: #ffffff;
@@ -106,12 +126,20 @@
         font-size: 0.875rem;
         color: #868e96;
     }
+
+    .footer {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
 </style>
 
 <div class="profile-page">
     <div class="profile-header">
         {% if data.user_profile.profile_picture %}
-            <img src="{{ data.user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic">
+            <img src="{{ data.user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-user">
         {% else %}
             <img src="/media/default-profile.jpeg" alt="Default Profile Picture" class="profile-pic">
         {% endif %}
@@ -149,12 +177,13 @@
                 <a href="{% url 'update_password_view' %}" class="btn btn-primary">Update Password</a>
             </div>
         </div>
+    {% else %}
+        {% if data.recipes_count > 0 %}
+            <a href="{% url 'view_more_posts' user.username %}" class="btn btn-primary">Read More</a>
+        {% endif %}
     {% endif %}
-    {% if data.recipes_count > 0 %}
-        <a href="{% url 'view_more_posts' user.username %}" class="btn btn-primary">Read_More</a>
-    {% endif %}
-    <div class="footer">
 
+    <div class="footer">
         <a href="{% url 'faq' %}">FAQ</a>
         <a href="{% url 'contact' %}">Contact Us</a>
         <a href="{% url 'services' %}">Services</a>

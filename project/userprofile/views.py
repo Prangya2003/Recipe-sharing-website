@@ -154,14 +154,12 @@ def services_view(request):
     return render(request, 'services.html')
 
 def view_more_posts(request,username):
-    User = get_user_model()  # Get the User model
+    User = get_user_model()
     user_instance = User.objects.get(username=username) 
-    # Get all recipes by the user
     user_recipes = RecipeModel.objects.filter(chef=user_instance)
 
     comments = CommentModel.objects.filter(recipe__in=user_recipes)
     ratings = RatingModel.objects.filter(recipe__in=user_recipes)
-    # Context data to pass to the template
     if request.method == 'POST':
         if 'comment_content' in request.POST and 'recipe_id' in request.POST:
             recipe_id = request.POST.get('recipe_id')
@@ -182,11 +180,9 @@ def view_more_posts(request,username):
             if recipe_id and rating_score:
                 recipe = get_object_or_404(RecipeModel, id=recipe_id)
 
-                # Create a rating instance
                 rating_instance = RatingModel(user=request.user, recipe=recipe, score=int(rating_score))
                 rating_instance.save()
                 return redirect('view_more_posts', username=username)
-        # Redirect to avoid resubmission of form on page refresh
 
 
     context = {
@@ -213,10 +209,7 @@ def search_profile_view(request):
             # Handle no results scenario (e.g., redirect to another page, display a message)
             #return HttpResponse('No recipes found for your search.')  # Example of handling no results
     else:
-        # Display all recipes if no search term (optional)
         return render(request, 'search.html', context={'search_results': RecipeModel.objects.all()})
-
-    # This line is unreachable if the above conditions return a response
     return render(request, 'search.html', context={'search_results': search_results})
 
 @login_required

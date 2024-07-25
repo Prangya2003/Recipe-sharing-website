@@ -3,10 +3,83 @@
 {% block body %}
 {% include "navbar.html" %}
 <style>
-    /* Your existing styles */
+    /* General container styling */
+    .container {
+        max-width: 900px;
+        margin-top: 2rem;
+    }
+
+    /* Recipe item styling */
+    .recipe-item {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        background-color: #f9f9f9;
+    }
+
+    /* Recipe name styling */
+    .recipe-item h3 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .recipe-item a {
+        color: #fff;
+        background-color: #28a745; /* Changed color */
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .recipe-item a:hover {
+        background-color: #218838; /* Darker shade for hover effect */
+        text-decoration: none;
+    }
+
+    /* Comments and Ratings section styling */
+    .comment-item, .rating_score {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-item p, .rating_score p {
+        font-size: 0.9rem;
+    }
+
+    .comment-item strong, .rating_score strong {
+        font-weight: bold;
+    }
+
+    /* Forms styling */
+    .form-control {
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        margin-top: 0.5rem;
+    }
+
+    /* Smaller text for headings */
+    .small-heading {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
 </style>
 
-<div class="container mt-5 pt-4">
+<div class="container mt-5 pt-5">
     <h1>{{ user.username }}'s Recipes</h1>
 
     {% for recipe in user_recipes %}
@@ -15,19 +88,18 @@
             <p class="recipe-id">Recipe ID: {{ recipe.id }}</p>
             <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-secondary">View Recipe</a>
 
-            <h4>Comments</h4>
+            <h4>Comments:</h4>
             {% with recipe.CommentModel_recipe.all as recipe_comments %}
-
                 {% for comment in recipe_comments %}
                     <div class="comment-item">
-                        <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
                     </div>
                 {% empty %}
                     <p>No comments yet.</p>
                 {% endfor %}
             {% endwith %}
 
-            <h4>Leave a Comment</h4>
+            <h4 class="small-heading">Leave a Comment</h4>
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
@@ -35,20 +107,20 @@
                 <button type="submit" class="btn btn-primary">Submit Comment</button>
             </form>
 
-
-            <h4>Ratings</h4>
+            <h4 >Ratings:</h4>
             {% with recipe.RatingModel_recipe.all as recipe_ratings %}
                 {% if recipe_ratings %}
                     {% for rating in recipe_ratings %}
                         <div class="rating_score">
-                            <p><strong>{{ rating.user.username }}:</strong> {{ rating.score }}</p>
+                            <p><strong>{{ rating.user.username }}</strong>: {{ rating.score }}</p>
                         </div>
                     {% empty %}
                         <p>No ratings yet.</p>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <h4>Rate this Recipe</h4>
+            
+            <h4 class="small-heading">Rate this Recipe</h4>
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
@@ -59,9 +131,8 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
-                <button type="submit" class="btn btn-primary">Submit Rating</button><br><br>
+                <button type="submit" class="btn btn-primary">Submit Rating</button>
             </form>
-
         </div>
     {% endfor %}
 </div>
