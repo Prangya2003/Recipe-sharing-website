@@ -1,3 +1,182 @@
-from django.shortcuts import render
+
+from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import get_user_model,authenticate,login,logout
+from .models import UserProfileModel
+from recipe.models import RecipeModel
+from .models import UserProfileModel
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
 
 # Create your views here.
+def front_view(request):
+    return render(request,'front.html')
+
+@login_required
+def profile_view(request, username):
+    User = get_user_model()
+    user_instance = get_object_or_404(User, username=username)
+    
+    # Fetch user profile
+    user_profile = get_object_or_404(UserProfileModel, user=user_instance)
+
+    user_recipes = RecipeModel.objects.filter(chef=user_instance)
+    data = {
+        "is_user_profile": request.user == user_instance,
+        "recipes_count": user_recipes.count(),
+        "user_recipes": user_recipes,
+        "user_profile": user_profile,  # Add user profile to the context
+        "saved_recipes": user_profile.saved_recipes.all(),
+    }
+    return render(request, 'profile.html', context={"request": request, "user": user_instance, "data": data})
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user_instance = authenticate(username=username, password=password)
+        if user_instance is not None:
+            login(request,user_instance)
+            return redirect('home_view')
+        else:
+            print("Invalid username or password")
+            return redirect('login_view')
+
+    return render(request, 'login.html') 
+
+def signup_view(request):
+    error_flag = False  
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+        if get_user_model().objects.filter(username=username).exists():
+            messages.error(request,"Username is already taken")
+            error_flag = True
+            return redirect('signup_view')
+            
+        else:
+            user_instance = get_user_model().objects.create(username=username,first_name=first_name,last_name=last_name,email=email)
+            user_instance.set_password(password)
+            user_instance.save()
+            UserProfileModel.objects.create(user=user_instance)
+            messages.info(request,'Userprofile created successfully')
+        if not error_flag:
+            return redirect('login_view')
+    return render(request, 'signup.html')
+
+def update_user_profile(request):
+    user_instance = request.user
+    user_profile_instance, created = UserProfileModel.objects.get_or_create(user=user_instance)
+    
+    if request.method == 'POST':
+        user_instance.first_name = request.POST.get('first_name')
+        user_instance.last_name = request.POST.get('last_name')
+
+        new_username = request.POST.get('username')
+        if new_username and new_username != user_instance.username:
+            if get_user_model().objects.filter(username=new_username).exists():
+                print("Username already taken")
+            else:
+                user_instance.username = new_username
+
+       
+        if 'profile_picture' in request.FILES:
+            user_profile_instance.profile_picture = request.FILES['profile_picture']
+
+        user_profile_instance.save()
+        user_instance.save()
+
+        return redirect('profile_view', username=user_instance.username)
+
+    context = {"request": request, "user": user_instance, "profile": user_profile_instance}
+    return render(request, 'update_userprofile.html', context)
+
+
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+
+def update_password_view(request):
+    user_instance = request.user
+
+    if request.method == 'POST':
+        current_password = request.POST.get('password')
+        new_password = request.POST.get('new_password')
+        new_password_check = request.POST.get('new_password_check')
+
+        user_check = authenticate(username=user_instance.username, password=current_password)
+        if user_check is not None:
+            if new_password == new_password_check:
+                user_instance.set_password(new_password)
+                user_instance.save()
+                
+                # Re-authenticate user to avoid logout after password change
+                user = authenticate(username=user_instance.username, password=new_password)
+                if user is not None:
+                    login(request, user)
+                    update_session_auth_hash(request, user)  # Update session to prevent logout
+                    messages.success(request, 'Your password was successfully updated!')
+                    return redirect('profile_view', username=user_instance.username)
+                else:
+                    messages.error(request, 'Authentication failed after password change.')
+            else:
+                messages.error(request, 'New passwords do not match.')
+        else:
+            messages.error(request, 'Current password is incorrect.')
+
+    context = {"request": request, "user": user_instance}
+    return render(request, 'update_password.html', context)
+
+def search_profile_view(request):
+    query = request.GET.get('query')
+
+    if query:
+        search_results = RecipeModel.objects.filter(
+            Q(recipe_name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(chef__username__icontains=query)  # Assuming chef has a username field
+        )
+        if search_results:  # Check if any recipes matched the search
+            return render(request, 'search.html', context={'search_results': search_results})
+        #else:
+            # Handle no results scenario (e.g., redirect to another page, display a message)
+            #return HttpResponse('No recipes found for your search.')  # Example of handling no results
+    else:
+        # Display all recipes if no search term (optional)
+        return render(request, 'search.html', context={'search_results': RecipeModel.objects.all()})
+
+    # This line is unreachable if the above conditions return a response
+    return render(request, 'search.html', context={'search_results': search_results})
+
+def logout_view(request):
+    logout(request)
+    return redirect('front_view')
+    
+def home_view(request):
+    if request.user.is_authenticated:
+        recipes = RecipeModel.objects.all()
+        context = {
+            'recipes': recipes
+        }
+        return render(request, 'home.html', context)
+    else:
+        return redirect('login_view')
+ 
+def faq_view(request):
+    return render(request, 'faq.html')
+
+def contact_view(request):
+    return render(request, 'contact.html')
+
+def services_view(request):
+    return render(request, 'services.html')
+
+@login_required
+def saved_recipes_view(request):
+    user_profile = get_object_or_404(UserProfileModel, user=request.user)
+    saved_recipes = user_profile.saved_recipes.all()
+    return render(request, 'profile.html', {'saved_recipes': saved_recipes})
