@@ -140,7 +140,7 @@
                 <h2>Add Recipe</h2>
                 <a href="{% url 'create_recipe_view' %}" class="btn btn-primary">Add Recipe</a>
             </div>
-
+            
             <div>
                 <h2>Profile Actions</h2>
                 <a href="{% url 'update_user_profile' %}" class="btn btn-primary">Update Profile</a>
@@ -148,5 +148,14 @@
             </div>
         </div>
     {% endif %}
+    {% if data.recipes_count > 0 %}
+        <a href="{% url 'view_more_posts' user.username %}" class="btn btn-primary">Read_More</a>
+    {% endif %}
+    <div class="footer">
+
+        <a href="{% url 'faq' %}">FAQ</a>
+        <a href="{% url 'contact' %}">Contact Us</a>
+        <a href="{% url 'services' %}">Services</a>
+    </div>
 </div>
 {% endblock %}

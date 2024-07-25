@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
-from recipe.models import RecipeModel
+from recipe.models import RecipeModel,CommentModel, RatingModel
 
 # Create your views here.
 def front_view(request):
@@ -148,3 +148,48 @@ def contact_view(request):
 
 def services_view(request):
     return render(request, 'services.html')
+
+def view_more_posts(request,username):
+    User = get_user_model()  # Get the User model
+    user_instance = User.objects.get(username=username) 
+    # Get all recipes by the user
+    user_recipes = RecipeModel.objects.filter(chef=user_instance)
+
+    comments = CommentModel.objects.filter(recipe__in=user_recipes)
+    ratings = RatingModel.objects.filter(recipe__in=user_recipes)
+    # Context data to pass to the template
+    if request.method == 'POST':
+        if 'comment_content' in request.POST and 'recipe_id' in request.POST:
+            recipe_id = request.POST.get('recipe_id')
+            comment_content = request.POST.get('comment_content')
+
+            if recipe_id and comment_content:
+                recipe = get_object_or_404(RecipeModel, id=recipe_id)
+
+                # Create a comment instance
+                comment_instance = CommentModel(user=request.user, recipe=recipe, content=comment_content)
+                comment_instance.save()
+                return redirect('view_more_posts', username=username)
+
+        elif 'rating_score' in request.POST and 'recipe_id' in request.POST:
+            recipe_id = request.POST.get('recipe_id')
+            rating_score = request.POST.get('rating_score')
+
+            if recipe_id and rating_score:
+                recipe = get_object_or_404(RecipeModel, id=recipe_id)
+
+                # Create a rating instance
+                rating_instance = RatingModel(user=request.user, recipe=recipe, score=int(rating_score))
+                rating_instance.save()
+                return redirect('view_more_posts', username=username)
+        # Redirect to avoid resubmission of form on page refresh
+
+
+    context = {
+        "user": user_instance,
+        "user_recipes": user_recipes,
+        "comments": comments,
+        "ratings": ratings,
+    }
+
+    return render(request, 'view_more_posts.html', context)
