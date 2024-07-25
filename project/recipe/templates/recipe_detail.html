@@ -2,6 +2,7 @@
 {% block title %}Recipe Detail{% endblock %}
 
 {% block body %}
+{% include "navbar.html" %}
 <div class="container mt-5 pt-4">
     <h2 class="mb-4">Recipe Details</h2>
 
@@ -44,7 +45,7 @@
     </div>
     
     {% include "saving.html"%}
-
+    
     {% if creator_username %}
     <div class="mt-4">
         <h3>Recipe Creator:</h3>

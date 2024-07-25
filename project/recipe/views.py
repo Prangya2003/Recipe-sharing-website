@@ -4,8 +4,8 @@ from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-from .models import RecipeModel
 from userprofile.models import UserProfileModel
+
 # Create your views here.
 
 def recipe_detail(request,id):
@@ -45,6 +45,8 @@ def create_recipe_view(request):
         return redirect('recipe_detail',id=recipe.id)  
     return render(request, 'create_recipe.html')
 
+
+
 @login_required
 def update_recipe_view(request, id):
     recipe = get_object_or_404(RecipeModel, id=id)
@@ -79,10 +81,7 @@ def delete_recipe_view(request, id):
         recipe.delete()
         return redirect('profile_view', username=request.user.username)
 
-
     return render(request, 'confirm_delete.html', {'recipe': recipe})
-
-#def review_view(request, id):
 
 @login_required
 def save_view(request, id):
@@ -90,7 +89,7 @@ def save_view(request, id):
 
     if request.method == 'POST':
         # Get or create the UserProfileModel instance
-        user_profile.created = UserProfileModel.objects.get_or_create(user=request.user)
+        user_profile, created = UserProfileModel.objects.get_or_create(user=request.user)
 
         # Check if the recipe is already saved
         if recipe not in user_profile.saved_recipes.all():
@@ -104,4 +103,3 @@ def save_view(request, id):
 
     # If the request method is not POST, redirect to the recipe detail page
     return redirect('recipe_detail', id=recipe.id)
-
