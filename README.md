@@ -85,6 +85,8 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 - Shows the full recipe, including ingredients and step-by-step instructions.
 #### User Profile
 - Allows users to view and manage their recipes, update their profile information, and change their password.
+#### Save Recipe
+- Users can save their favorite recipes for easy access later.
 #### Navbar
 - Navigation links for Home, Profile, and Logout for easy site navigation.
 #### Footer
@@ -92,6 +94,6 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 
 ## Collaborators
 
-- [@Prangya2003](https://www.github.com/prangya2003)
-- [@AkankshaBarik](https://github.com/AkankshaBarik)
-- [@Silvasimran](https://github.com/Silvasim)
+- [@Prangya2003](https://www.github.com/prangya2003) : Handled CRUD operations for profiles and recipes, and designed the profile page.
+- [@AkankshaBarik](https://github.com/AkankshaBarik): Developed the landing page and home page, and implemented the rating and commenting features.
+- [@Silvasimran](https://github.com/Silvasim):  Created the save recipe functionality and search feature.
