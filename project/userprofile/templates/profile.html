@@ -15,14 +15,14 @@
     }
 
     .profile-page {
-        margin-top: 80px;
+        margin-top: 120px;
         padding: 40px;
         max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
         background-color: #ffffff;
         border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
     .profile-header {
@@ -30,7 +30,7 @@
         margin-bottom: 30px;
     }
 
-    .profile-pic {
+    .profile-pic-default {
         width: 150px;
         height: 150px;
         border-radius: 20%;
@@ -141,7 +141,7 @@
         {% if data.user_profile.profile_picture %}
             <img src="{{ data.user_profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic-user">
         {% else %}
-            <img src="/media/default-profile.jpeg" alt="Default Profile Picture" class="profile-pic">
+            <img src="/media/default-profile.jpeg" alt="Default Profile Picture" class="profile-pic-default">
         {% endif %}
         <h1>{{ user.username }}'s Profile</h1>
     </div>
@@ -169,7 +169,7 @@
                 <a href="{% url 'create_recipe_view' %}" class="btn btn-primary">Add Recipe</a>
             </div>
             
-            {% include "save.html" %}
+            {% include "saved.html" %}
 
             <div>
                 <h2>Profile Actions</h2>

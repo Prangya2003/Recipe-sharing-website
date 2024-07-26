@@ -29,7 +29,7 @@
 
     .recipe-item a {
         color: #fff;
-        background-color: #28a745; /* Changed color */
+        background-color: #28a745; 
         text-decoration: none;
         padding: 8px 12px;
         border-radius: 4px;
@@ -37,12 +37,16 @@
     }
 
     .recipe-item a:hover {
-        background-color: #218838; /* Darker shade for hover effect */
+        background-color: #218838; 
         text-decoration: none;
     }
 
     /* Comments and Ratings section styling */
-    .comment-item, .rating_score {
+    .comments-ratings {
+        margin-top: 1rem;
+    }
+
+    .comments-ratings .section {
         border: 1px solid #ddd;
         padding: 10px;
         border-radius: 8px;
@@ -50,11 +54,11 @@
         margin-bottom: 0.5rem;
     }
 
-    .comment-item p, .rating_score p {
+    .comments-ratings .section p {
         font-size: 0.9rem;
     }
 
-    .comment-item strong, .rating_score strong {
+    .comments-ratings .section strong {
         font-weight: bold;
     }
 
@@ -88,51 +92,57 @@
             <p class="recipe-id">Recipe ID: {{ recipe.id }}</p>
             <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-secondary">View Recipe</a>
 
-            <h4>Comments:</h4>
-            {% with recipe.CommentModel_recipe.all as recipe_comments %}
-                {% for comment in recipe_comments %}
-                    <div class="comment-item">
-                        <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
-                    </div>
-                {% empty %}
-                    <p>No comments yet.</p>
-                {% endfor %}
-            {% endwith %}
+            <div class="comments-ratings">
+                <div class="section">
+                    <h4>Comments:</h4>
+                    {% with recipe.CommentModel_recipe.all as recipe_comments %}
+                        {% for comment in recipe_comments %}
+                            <div class="comment-item">
+                                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet.</p>
+                        {% endfor %}
+                    {% endwith %}
 
-            <h4 class="small-heading">Leave a Comment</h4>
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
-                <textarea name="comment_content" rows="3" class="form-control" placeholder="Add a comment..."></textarea>
-                <button type="submit" class="btn btn-primary">Submit Comment</button>
-            </form>
+                    <h4 class="small-heading">Leave a Comment</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                        <textarea name="comment_content" rows="3" class="form-control" placeholder="Add a comment..."></textarea>
+                        <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    </form>
+                </div>
 
-            <h4 >Ratings:</h4>
-            {% with recipe.RatingModel_recipe.all as recipe_ratings %}
-                {% if recipe_ratings %}
-                    {% for rating in recipe_ratings %}
-                        <div class="rating_score">
-                            <p><strong>{{ rating.user.username }}</strong>: {{ rating.score }}</p>
-                        </div>
-                    {% empty %}
-                        <p>No ratings yet.</p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <h4 class="small-heading">Rate this Recipe</h4>
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
-                <select name="rating_score" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Submit Rating</button>
-            </form>
+                <div class="section">
+                    <h4>Ratings:</h4>
+                    {% with recipe.RatingModel_recipe.all as recipe_ratings %}
+                        {% if recipe_ratings %}
+                            {% for rating in recipe_ratings %}
+                                <div class="rating_score">
+                                    <p><strong>{{ rating.user.username }}</strong>: {{ rating.score }}</p>
+                                </div>
+                            {% empty %}
+                                <p>No ratings yet.</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <h4 class="small-heading">Rate this Recipe</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                        <select name="rating_score" class="form-control">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    </form>
+                </div>
+            </div>
         </div>
     {% endfor %}
 </div>
