@@ -15,19 +15,28 @@ def front_view(request):
 def profile_view(request, username):
     User = get_user_model()
     user_instance = get_object_or_404(User, username=username)
-    
+
     # Fetch user profile
     user_profile = get_object_or_404(UserProfileModel, user=user_instance)
 
+    # Fetch recipes by the user
     user_recipes = RecipeModel.objects.filter(chef=user_instance)
+    
     data = {
         "is_user_profile": request.user == user_instance,
         "recipes_count": user_recipes.count(),
         "user_recipes": user_recipes,
-        "user_profile": user_profile,  # Add user profile to the context
+        "user_profile": user_profile,
         "saved_recipes": user_profile.saved_recipes.all(),
     }
-    return render(request, 'profile.html', context={"request": request, "user": user_instance, "data": data})
+    
+    context = {
+        "request": request,
+        "user": user_instance,
+        "data": data
+    }
+    
+    return render(request, 'profile.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -155,50 +164,8 @@ def contact_view(request):
 def services_view(request):
     return render(request, 'services.html')
 
-def view_more_posts(request,username):
-    User = get_user_model()
-    user_instance = User.objects.get(username=username) 
-    user_recipes = RecipeModel.objects.filter(chef=user_instance)
-
-    comments = CommentModel.objects.filter(recipe__in=user_recipes)
-    ratings = RatingModel.objects.filter(recipe__in=user_recipes)
-    if request.method == 'POST':
-        if 'comment_content' in request.POST and 'recipe_id' in request.POST:
-            recipe_id = request.POST.get('recipe_id')
-            comment_content = request.POST.get('comment_content')
-
-            if recipe_id and comment_content:
-                recipe = get_object_or_404(RecipeModel, id=recipe_id)
-
-                # Create a comment instance
-                comment_instance = CommentModel(user=request.user, recipe=recipe, content=comment_content)
-                comment_instance.save()
-                return redirect('view_more_posts', username=username)
-
-        elif 'rating_score' in request.POST and 'recipe_id' in request.POST:
-            recipe_id = request.POST.get('recipe_id')
-            rating_score = request.POST.get('rating_score')
-
-            if recipe_id and rating_score:
-                recipe = get_object_or_404(RecipeModel, id=recipe_id)
-
-                rating_instance = RatingModel(user=request.user, recipe=recipe, score=int(rating_score))
-                rating_instance.save()
-                return redirect('view_more_posts', username=username)
-
-
-    context = {
-        "user": user_instance,
-        "user_recipes": user_recipes,
-        "comments": comments,
-        "ratings": ratings,
-    }
-
-    return render(request, 'view_more_posts.html', context)
-
 def search_profile_view(request):
     query = request.GET['query']
-    #recipes = RecipeModel.objects.all()
     recipesName = RecipeModel.objects.filter(recipe_name__icontains=query)
     recipesdescription = RecipeModel.objects.filter(description__icontains=query)
     recipescuisine = RecipeModel.objects.filter(cuisine__icontains=query)

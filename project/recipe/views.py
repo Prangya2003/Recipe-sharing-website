@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import RecipeModel
+from .models import RecipeModel,CommentModel,RatingModel
 from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -14,13 +14,46 @@ def recipe_detail(request, id):
     creator_username = recipe.chef.username if recipe.chef else None
     user_profile = get_object_or_404(UserProfileModel, user=request.user)
     is_saved = user_profile.saved_recipes.filter(id=id).exists()
+    comments = CommentModel.objects.filter(recipe=recipe)
+
+    ratings = recipe.RatingModel_recipe.all()
+    
+    if request.method == 'POST':
+        if 'comment_content' in request.POST:
+            comment_content = request.POST.get('comment_content')
+            if comment_content:
+                CommentModel.objects.create(
+                    user=request.user,
+                    recipe=recipe,
+                    content=comment_content
+                )
+            return redirect('recipe_detail', id=id)
+        
+        elif 'rating' in request.POST:
+            score = int(request.POST.get('score'))
+            existing_rating = RatingModel.objects.filter(user=request.user, recipe=recipe).first()
+            
+            if existing_rating:
+                # Update existing rating
+                existing_rating.score = score
+                existing_rating.save()
+            else:
+                # Create new rating
+                RatingModel.objects.create(user=request.user, recipe=recipe, score=score)
+            
+            return redirect('recipe_detail', id=id)
+    
     context = {
         'recipe': recipe,
         'creator_username': creator_username,
         'current_user': request.user,
-        'is_saved': is_saved
+        'is_saved': is_saved,
+        'comments': comments,
+        'ratings': ratings,
     }
+    
     return render(request, 'recipe_detail.html', context)
+
 
 User = get_user_model()
 @login_required
