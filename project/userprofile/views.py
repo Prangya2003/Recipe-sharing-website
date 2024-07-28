@@ -185,20 +185,23 @@ from django.http import HttpResponseRedirect
 
 @login_required
 def saved_recipes_view(request):
+    print("Entered saved_recipes_view")
     user_profile = get_object_or_404(UserProfileModel, user=request.user)
     saved_recipes = user_profile.saved_recipes.all()
+    
     if request.method == 'POST':
         recipe_id = request.POST.get('recipe_id')
         recipe = get_object_or_404(RecipeModel, id=recipe_id)
-
+        
         if user_profile.saved_recipes.filter(id=recipe_id).exists():
             user_profile.saved_recipes.remove(recipe)
             messages.warning(request, "Recipe unsaved successfully")
         else:
             user_profile.saved_recipes.add(recipe)
             messages.success(request, "Recipe saved successfully")
-
+        
         user_profile.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))  
-
+        # Redirect back to the referring page
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    
     return render(request, 'userprofile/saved.html', {'saved_recipes': saved_recipes})

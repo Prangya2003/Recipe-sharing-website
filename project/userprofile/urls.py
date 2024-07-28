@@ -20,7 +20,6 @@ urlpatterns = [
     path('faq/', faq_view, name="faq"),
     path('contact/', contact_view, name="contact"),
     path('services/', services_view, name="services"),
-    #path('userprofile/view-more-posts/<str:username>/', view_more_posts, name='view_more_posts'),
     
     path('search-profile-view/',search_profile_view, name="search_profile_view"),
     path('saved-recipes-view/', saved_recipes_view, name='saved_recipes_view'),

@@ -19,19 +19,17 @@ class RecipeModel(models.Model):
     def __str__(self):
         return self.recipe_name
     
-    def get_comments(self):
-        return self.commentModel_recipe.all()
 
     def get_ratings(self):
         return self.ratingModel_recipe.all()
     
 class CommentModel(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,related_name="CommentModel_user",null=True)
-    recipe = models.ForeignKey('RecipeModel',on_delete=models.CASCADE, related_name="CommentModel_recipe",null=True)
-    content = models.TextField()
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="CommentModel_user", null=True)
+    recipe = models.ForeignKey('RecipeModel', on_delete=models.CASCADE, related_name="comments", null=True)
+    comment = models.CharField(max_length=100, null=True, blank=True)  
 
     updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True,editable=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
 class RatingModel(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="RatingModel_user", null=True)
