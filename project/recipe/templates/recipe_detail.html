@@ -36,77 +36,88 @@
     </div>
 
     <!-- Actions -->
-    <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Save Button -->
+        <form method="post" action="{% url 'saved_recipes_view' %}" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+            {% if is_saved %}
+                <button type="submit" class="btn btn-danger">Unsave Recipe</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Save Recipe</button>
+            {% endif %}
+        </form>
+
+        <!-- Update and Delete Buttons -->
         {% if current_user == recipe.chef %}
-            <form method="post" action="{% url 'delete_recipe_view' recipe.id %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-            <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success btn-update">Update</a>
+            <div class="d-inline">
+                <form method="post" action="{% url 'delete_recipe_view' recipe.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <a href="{% url 'update_recipe_view' recipe.id %}" class="btn btn-success btn-update">Update</a>
+            </div>
         {% endif %}
     </div>
-
-    <!-- Saving Button -->
-    <form method="post" action="{% url 'saved_recipes_view' %}">
-        {% csrf_token %}
-        <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
-        {% if is_saved %}
-            <button type="submit" class="btn btn-danger">Unsave Recipe</button>
-        {% else %}
-            <button type="submit" class="btn btn-primary">Save Recipe</button>
-        {% endif %}
-    </form>
 
     <!-- Ratings and Comments -->
-    <div class="mb-4 mt-5">
-        <h2>Ratings:</h2>
-        <ul>
-          {% for rating in ratings %}
-            <li>{{ rating.score }} ({{ rating.user.username }})</li>
-          {% endfor %}
-        </ul>
-        
-        
-        <h2>Comments:</h2>
-        {% if comments %}
-            {% for comment in comments %}
-            <div class="comment-item">
-                <p><strong>{{ comment.user.username }}</strong>: {{ comment.comment }}</p>
-            </div>
-            {% endfor %}
+    <div class="ratings-comments mb-4 mt-5">
+        <div class="ratings">
+            <h2>Ratings:</h2>
+            {% if ratings %}
+            <ul>
+                {% for rating in ratings %}
+                    <li>{{ rating.score }} ({{ rating.user.username }})</li>
+                {% endfor %}
+            </ul>
         {% else %}
-        <p>No comments yet.</p>
+            <p>No ratings yet.</p>
         {% endif %}
-        
-    </div>
-
-    {% if request.user.is_authenticated %}
-    <!-- Show comment and rating forms only if user is not the creator -->
-    {% if request.user != recipe.chef %}
-        <div class="mb-4">
-            <form method="post" action="{% url 'post_comment' recipe.id %}">
-                {% csrf_token %}
-                <input type="text" name="comment_content" placeholder="Enter your comment" required>
-                <button type="submit">Post Comment</button>
-            </form>
-
-            <form method="post" class="mt-3">
-                {% csrf_token %}
-                <h3>Rate this Recipe</h3>
-                <select name="score" class="form-select mb-2">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <button type="submit" name="rating" class="btn btn-primary">Submit Rating</button>
-            </form>
+            {% if request.user.is_authenticated %}
+                <!-- Rating Form -->
+                {% if request.user != recipe.chef %}
+                    <form method="post" class="mt-3">
+                        {% csrf_token %}
+                        <h3 class="rating-title">Rate this Recipe</h3>
+                        <select name="score" class="form-select mb-2">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit" name="rating" class="btn btn-primary">Submit Rating</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <p class="alert alert-info">You need to be logged in to rate this recipe.</p>
+            {% endif %}
         </div>
-    {% endif %}
-{% else %}
-    <p class="alert alert-info">You need to be logged in to comment or rate this recipe.</p>
-{% endif %}
+        <div class="comments">
+            <h2>Comments:</h2>
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="comment-item">
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.comment }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p>No comments yet.</p>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+                <!-- Comment Form -->
+                {% if request.user != recipe.chef %}
+                    <form method="post" action="{% url 'post_comment' recipe.id %}" class="mt-3">
+                        {% csrf_token %}
+                        <input type="text" name="comment_content" placeholder="Enter your comment" required class="form-control mb-2">
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <p class="alert alert-info">You need to be logged in to comment on this recipe.</p>
+            {% endif %}
+        </div>
+    </div>
 
     {% if creator_username %}
     <div class="mt-4">
@@ -176,21 +187,22 @@
     .col-md-4, .col-md-8 {
         padding: 0;
     }
-    /* Style for Ingredients section */
-    .mb-3 h4 {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+    .ratings-comments {
+        display: flex;
+        justify-content: space-between;
     }
-    pre {
-        background-color: #f5f5f5;
-        padding: 10px;
-        border-radius: 8px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
+    .ratings, .comments {
+        width: 48%;
     }
     .form-control, .form-select {
         margin-bottom: 15px;
+    }
+    .comment-item {
+        margin-bottom: 10px;
+    }
+    .rating-title {
+        font-size: 1rem; /* Adjust the size here */
+        font-weight: bold;
     }
 </style>
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Delete Account{% endblock %}
+
+{% block body %}
+{% include "navbar.html" %}
+<div class="container mt-5 pt-4">
+    <h3>Delete Your Account</h3>
+    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+        <a href="{% url 'profile_view' user.username %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

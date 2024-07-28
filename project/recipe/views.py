@@ -40,9 +40,7 @@ def recipe_detail(request, id):
 
 @login_required
 def post_comment(request, id):
-    print("Post comment view called")
-    print(f"Recipe ID: {id}")
-    print(f"Comment content: {request.POST.get('comment_content')}")
+    
     recipe = get_object_or_404(RecipeModel, id=id)
     if request.method == 'POST':
         comment_content = request.POST.get('comment_content')

@@ -144,6 +144,21 @@ def update_password_view(request):
 def logout_view(request):
     logout(request)
     return redirect('front_view')
+ 
+@login_required
+def delete_account_view(request):
+    user_instance = request.user
+    user_profile = get_object_or_404(UserProfileModel, user=user_instance)
+
+    if request.method == 'POST':
+        # Additional checks can be added here
+        user_profile.delete()
+        user_instance.delete()
+        messages.success(request, 'Your account has been deleted successfully.')
+        return redirect('front_view')
+
+    return render(request, 'delete_account.html')
+
     
 def home_view(request):
     if request.user.is_authenticated:
@@ -201,7 +216,7 @@ def saved_recipes_view(request):
             messages.success(request, "Recipe saved successfully")
         
         user_profile.save()
-        # Redirect back to the referring page
+        
         return redirect(request.META.get('HTTP_REFERER', '/'))
     
     return render(request, 'userprofile/saved.html', {'saved_recipes': saved_recipes})
