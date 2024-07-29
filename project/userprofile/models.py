@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 class UserProfileModel(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE,related_name="UserProfileModel_user")
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE,related_name="UserProfileModel_user",null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     saved_recipes = models.ManyToManyField('recipe.RecipeModel', related_name='saved_by_users', blank=True)
     

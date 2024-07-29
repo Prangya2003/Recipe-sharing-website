@@ -1,9 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import RecipeModel,CommentModel,RatingModel
-from django.core.files.storage import default_storage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.contrib import messages
 from userprofile.models import UserProfileModel
 
 # Create your views here.
@@ -86,11 +84,6 @@ def create_recipe_view(request):
 @login_required
 def update_recipe_view(request, id):
     recipe = get_object_or_404(RecipeModel, id=id)
-
-    # Authorization check
-    if recipe.chef != request.user:
-        return render(request, 'error.html', {'message': 'You are not authorized to update this recipe.'})
-
     if request.method == "POST":
         recipe.recipe_name = request.POST.get('recipe_name')
         if 'picture' in request.FILES:
@@ -108,11 +101,6 @@ def update_recipe_view(request, id):
 @login_required
 def delete_recipe_view(request, id):
     recipe = get_object_or_404(RecipeModel, id=id)
-
-    # Authorization check
-    if recipe.chef != request.user:
-        return render(request, 'error.html', {'message': 'You are not authorized to delete this recipe.'})
-
     if request.method == 'POST':
         recipe.delete()
         return redirect('profile_view', username=request.user.username)

@@ -14,11 +14,11 @@
             {% csrf_token %}
             <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
             <button type="submit" class="btn btn-sm btn-outline-danger">Unsave</button>
-          </form>
+        </form>
         </li>
       {% endfor %}
     {% else %}
-      <li class="list-group-item text-muted">You have no saved recipes.</li>
+      <p>You have no saved recipes.</p>
     {% endif %}
   </ul>
 </div>

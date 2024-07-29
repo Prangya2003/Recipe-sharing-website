@@ -26,7 +26,7 @@ class RecipeModel(models.Model):
 class CommentModel(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="CommentModel_user", null=True)
     recipe = models.ForeignKey('RecipeModel', on_delete=models.CASCADE, related_name="comments", null=True)
-    comment = models.CharField(max_length=100, null=True, blank=True)  
+    comment = models.CharField(max_length=200, null=True, blank=True)  
 
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)

@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model,authenticate,login,logout
 from .models import UserProfileModel
-from recipe.models import RecipeModel,CommentModel, RatingModel
+from recipe.models import RecipeModel
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -15,11 +15,7 @@ def front_view(request):
 def profile_view(request, username):
     User = get_user_model()
     user_instance = get_object_or_404(User, username=username)
-
-    # Fetch user profile
     user_profile = get_object_or_404(UserProfileModel, user=user_instance)
-
-    # Fetch recipes by the user
     user_recipes = RecipeModel.objects.filter(chef=user_instance)
     
     data = {
@@ -151,7 +147,6 @@ def delete_account_view(request):
     user_profile = get_object_or_404(UserProfileModel, user=user_instance)
 
     if request.method == 'POST':
-        # Additional checks can be added here
         user_profile.delete()
         user_instance.delete()
         messages.success(request, 'Your account has been deleted successfully.')
@@ -196,14 +191,12 @@ def search_profile_view(request):
 
     return render(request, 'searching.html', context)
 
-from django.http import HttpResponseRedirect
 
 @login_required
 def saved_recipes_view(request):
-    print("Entered saved_recipes_view")
     user_profile = get_object_or_404(UserProfileModel, user=request.user)
     saved_recipes = user_profile.saved_recipes.all()
-    
+
     if request.method == 'POST':
         recipe_id = request.POST.get('recipe_id')
         recipe = get_object_or_404(RecipeModel, id=recipe_id)
@@ -218,5 +211,5 @@ def saved_recipes_view(request):
         user_profile.save()
         
         return redirect(request.META.get('HTTP_REFERER', '/'))
-    
+
     return render(request, 'userprofile/saved.html', {'saved_recipes': saved_recipes})

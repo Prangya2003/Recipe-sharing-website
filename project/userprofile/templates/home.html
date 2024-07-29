@@ -6,7 +6,6 @@
 {% include "navbar.html" %}
 <div class="container mt-5 pt-1 "> 
     <div class="recipe-list  mb-1 mt-5">
-        <h2 class="heading">All Recipes</h2>
         <div class="row">
             {% for recipe in recipes %}
                 <div class="col-md-3 mb-4">
@@ -45,10 +44,6 @@
     }
     .flex-container {
         top : 10vh;
-    }
-    .heading {
-        margin-top: 80px; 
-        font-size: 40px;
     }
     .card {
         border-radius: 10px;
