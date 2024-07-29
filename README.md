@@ -26,13 +26,13 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 2. Navigate to the Project Directory:
 
 ```bash
-  cd recipe-sharing-website
+  cd recipe-sharing-website/project
 ```    
 
 3. Create a Virtual Environment (optional but recommended):
 
 ```bash
-  virtualenv venv
+    python -m venv venv
 ```    
 
 4. Activate the Virtual Environment:
@@ -67,7 +67,7 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 8. Run the Development Server:
 
 ```bash
-  cd recipe-sharing-website
+  python manage.py runserver
 ```   
 
 9. Open Your Browser:
@@ -84,9 +84,13 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 ####  Recipe Detail View
 - Shows the full recipe, including ingredients and step-by-step instructions.
 #### User Profile
-- Allows users to view and manage their recipes, update their profile information, and change their password.
+- Allows users to view and manage their recipes, update their profile information,change their password and delete their account.
 #### Save Recipe
 - Users can save their favorite recipes for easy access later.
+#### Search Feature
+- Search recipes based on name, cuisine, and type of food (appetizer, main course,beverage, or dessert)
+#### Ratings and Comments
+- Users can rate recipes and leave comments to share their feedback.
 #### Navbar
 - Navigation links for Home, Profile, and Logout for easy site navigation.
 #### Footer
@@ -94,6 +98,6 @@ This Recipe Sharing Website is a web application developed with Django. This pla
 
 ## Collaborators
 
+- [@AkankshaBarik](https://github.com/AkankshaBarik): Developed the landing page,home page, footer and implemented commenting features.
 - [@Prangya2003](https://www.github.com/prangya2003) : Handled CRUD operations for profiles and recipes, and designed the profile page.
-- [@AkankshaBarik](https://github.com/AkankshaBarik): Developed the landing page and home page, and implemented the rating and commenting features.
-- [@Silvasimran](https://github.com/Silvasim):  Created the save recipe functionality and search feature.
+- [@Silvasimran](https://github.com/Silvasim):  Created the save recipe functionality and search feature and implemented the rating feature.
